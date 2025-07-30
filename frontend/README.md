@@ -1,0 +1,4 @@
+
+GOOGLE_API_KEY=AIzaSyC4wy4Pora7akUZxL_SZfxH6ADfdw2r-FA
+MONGODB_URI=mongodb+srv://sanketbbt7:<db_password>@cluster0.s56jvsu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+CLERK_WEBHOOK_SECRET=sk_test_PFdlSMLm7TnXY3gCJ5KbGtPKt1KVLIeUVVKc8jNG7X
