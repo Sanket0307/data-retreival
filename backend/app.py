@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, Response
+from flask import Flask, request, jsonify, render_template, Response, send_from_directory
 from dotenv import load_dotenv
 from phi.agent import Agent
 from phi.model.groq import Groq
@@ -21,29 +21,24 @@ load_dotenv()
 
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 
-app = Flask(__name__)
+# Initialize Flask app to serve React frontend
+app = Flask(__name__, static_folder='dist', static_url_path='')
+
+# Configure CORS for API routes
 CORS(app, resources={r"/api/*": {
-    "origins": ["https://ai-powered-search-assistant-eight.vercel.app"],
+    "origins": ["https://ai-powered-search-assistant-eight.vercel.app", "http://localhost:3000", "http://localhost:5173"],
     "methods": ["GET", "POST", "OPTIONS", "DELETE", "PUT"],
     "allow_headers": ["Content-Type", "Authorization"]
-}})  # This will enable CORS for all routes
+}})
 
-@app.route('/')
-def home():
-    return jsonify({
-        "message": "AI Data Retrieval API is running!",
-        "status": "active",
-        "endpoints": {
-            "search": "/api/query",
-            "stream": "/api/stream",
-            "health": "/api/health",
-            "webhook": "/webhook",
-            "pushData": "/api/pushData",
-            "getStoredResponses": "/api/get-stored-responses",
-            "deleteResponse": "/api/delete-response",
-            "syncUser": "/api/sync-user"
-        }
-    })
+# Serve React App
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists(app.static_folder + '/' + path):
+        return send_from_directory(app.static_folder, path)
+    else:
+        return send_from_directory(app.static_folder, 'index.html')
 
 @app.route('/api/health')
 def health():
