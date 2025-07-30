@@ -28,6 +28,27 @@ CORS(app, resources={r"/api/*": {
     "allow_headers": ["Content-Type", "Authorization"]
 }})  # This will enable CORS for all routes
 
+@app.route('/')
+def home():
+    return jsonify({
+        "message": "AI Data Retrieval API is running!",
+        "status": "active",
+        "endpoints": {
+            "search": "/api/query",
+            "stream": "/api/stream",
+            "health": "/api/health",
+            "webhook": "/webhook",
+            "pushData": "/api/pushData",
+            "getStoredResponses": "/api/get-stored-responses",
+            "deleteResponse": "/api/delete-response",
+            "syncUser": "/api/sync-user"
+        }
+    })
+
+@app.route('/api/health')
+def health():
+    return jsonify({"status": "healthy", "service": "AI Data Retrieval"})
+
 # Get current date information for more accurate recent news and achievements
 current_year = datetime.now().year
 current_month = datetime.now().month
